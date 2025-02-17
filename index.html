@@ -9,6 +9,7 @@
         .question-container { max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ccc; border-radius: 10px; }
         .options button { margin: 5px; padding: 10px; }
         .feedback { font-weight: bold; margin-top: 10px; }
+        .final-result { font-size: 18px; font-weight: bold; margin-top: 20px; }
     </style>
 </head>
 <body>
@@ -18,35 +19,37 @@
         <p class="feedback" id="feedback"></p>
         <button id="nextButton" onclick="nextQuestion()" disabled>다음 문제</button>
     </div>
+    <div class="final-result" id="finalResult"></div>
     <script>
         const questions = [
-            { question: "JUnit은 자바 프로그래밍 언어용 단위 테스트 도구로 보이지 않고 숨겨진 단위 테스트를 끌어내어 정형화시켜 단위 테스트를 쉽게 해주는 테스트용 Framework이다.", options: ["O", "X"], answer: "O" },
-            { question: "RIP는 각 라우터에 접근하기 위한 최적의 네트워크 경로를 갱신하는 방법이다.", options: ["O", "X"], answer: "O" },
-            { question: "적절한 실행환경과 개발환경, 운영환경을 바르게 연결하세요.", options: ["데이터 처리, 테스트 자동화", "화면, 서버 프로그램 개발", "서비스 운영을 위한 시스템 설정"], answer: "데이터 처리, 테스트 자동화" },
-            { question: "공용 선택자는 무엇인가?", options: ["*", "#", ".", "~"], answer: "*" },
-            { question: "객체 a와 b가 같은 객체임을 확인하는 방법은?", options: ["assertEquals(a,b)", "assertSame(a,b)", "assertTrue(a)", "assertArrayEquals(a,b)"], answer: "assertSame(a,b)" },
-            { question: "빌드 방식에 따른 분류가 아닌 것은?", options: ["컴파일 언어", "인터프리터 언어", "바이트 코드 언어", "명령형 언어"], answer: "명령형 언어" },
-            { question: "TCP/IP에서 응용계층의 프로토콜이 아닌 것은?", options: ["FTP", "ARP", "IMAP", "SMTP"], answer: "ARP" },
-            { question: "유스케이스의 설명으로 옳지 않은 것은?", options: ["사용자 요구사항 기술", "외부 시스템과의 의사소통", "실제 수행 방법을 구현", "잘못된 설명"], answer: "잘못된 설명" },
-            { question: "HTML에서 콘텐츠 영역을 지정하는 태그는?", options: ["Header", "Section", "Article", "Aside"], answer: "Section" },
-            { question: "발견된 결함이 해결되고 결함이 아니라고 판명된 경우?", options: ["Assigned", "Clarified", "Closed", "Deferred"], answer: "Clarified" },
-            { question: "테이블에서 모든 값이 다르게 적재되어야 하는 열 설정?", options: ["PRIMARY KEY", "FOREIGN KEY", "UNIQUE", "NOT NULL"], answer: "UNIQUE" },
-            { question: "데이터베이스의 모든 객체를 조회할 수 있는 사전 영역?", options: ["DBA_", "ALL_", "USER_", "잘못된 값"], answer: "DBA_" },
-            { question: "추상화에서 연관된 속성을 하나의 집단으로 분류하는 것?", options: ["유형화", "집단화", "일반화", "조직화"], answer: "일반화" },
-            { question: "인터랙티브하게 사용할 수 있는 인터넷 기반 기술?", options: ["분산 시스템 SW", "IT 자원 관리", "서비스 플랫폼", "네트워크 보안"], answer: "서비스 플랫폼" },
-            { question: "동시에 다수 트랜잭션이 처리될 때 서로의 연산에 개입하지 않는 특징?", options: ["원자성", "일관성", "고립성", "지속성"], answer: "고립성" },
-            { question: "반복적으로 최소 한 번 수행되는 문은?", options: ["while", "switch", "do-while", "for"], answer: "do-while" },
-            { question: "결함 심각도 High가 아닌 경우는?", options: ["핵심 요구사항 미 구현", "시스템 다운", "장시간 시스템 응답 지연", "데이터베이스 에러"], answer: "장시간 시스템 응답 지연" },
-            { question: "인스펙션과 워크스루의 설명 중 틀린 것은?", options: ["워크스루는 체크리스트 사용", "인스펙션은 빠르다", "잘못된 설명", "정답 아님"], answer: "인스펙션은 빠르다" },
-            { question: "향후 기준이 되는 형상 항목의 집합체는?", options: ["기준선", "마이그레이션", "워크플로", "형상항목"], answer: "기준선" },
-            { question: "운영체제란?", options: ["소프트웨어 관리", "하드웨어 관리", "자원 관리", "모두 해당"], answer: "모두 해당" },
-            { question: "Java 라이브러리를 포함하여 패키징하는 단위는?", options: ["jar", "war", "ear", "exe"], answer: "jar" },
-            { question: "몸짓, 말소리만으로 IT 기기를 사용하는 인터페이스는?", options: ["GUI", "CLI", "NUI", "TUI"], answer: "NUI" },
-            { question: "사용자의 요구사항을 검증하는 테스트는?", options: ["단위 테스트", "통합 테스트", "인수 테스트", "시스템 테스트"], answer: "인수 테스트" },
-            { question: "프로그램과 분리된 공통 기능을 호출하여 사용하는 라이브러리는?", options: ["정적 라이브러리", "동적 라이브러리", "프레임워크", "SDK"], answer: "동적 라이브러리" }
+            { question: "JUnit은 자바 프로그래밍 언어용 단위 테스트 도구로 보이지 않고 숨겨진 단위 테스트를 끌어내어 정형화시켜 단위 테스트를 쉽게 해주는 테스트용 Framework이다.", options: ["O", "X"], answer: "O", explanation: "JUnit은 단위 테스트를 쉽게 할 수 있도록 돕는 테스트용 프레임워크입니다." },
+            { question: "RIP는 각 라우터에 접근하기 위한 최적의 네트워크 경로를 갱신하는 방법이다.", options: ["O", "X"], answer: "O", explanation: "RIP는 라우터 간의 네트워크 경로를 동적으로 갱신하는 프로토콜입니다." },
+            { question: "적절한 실행환경과 개발환경, 운영환경을 바르게 연결하세요.", options: ["데이터 처리, 테스트 자동화", "화면, 서버 프로그램 개발", "서비스 운영을 위한 시스템 설정"], answer: "데이터 처리, 테스트 자동화", explanation: "적절한 실행환경과 개발환경은 데이터 처리와 테스트 자동화를 위해 연결되어야 합니다." },
+            { question: "공용 선택자는 무엇인가?", options: ["*", "#", ".", "~"], answer: "*", explanation: "CSS에서 '*'는 모든 요소를 선택하는 공용 선택자입니다." },
+            { question: "객체 a와 b가 같은 객체임을 확인하는 방법은?", options: ["assertEquals(a,b)", "assertSame(a,b)", "assertTrue(a)", "assertArrayEquals(a,b)"], answer: "assertSame(a,b)", explanation: "assertSame은 두 객체가 같은 메모리 위치를 가리키는지 확인하는 함수입니다." },
+            { question: "빌드 방식에 따른 분류가 아닌 것은?", options: ["컴파일 언어", "인터프리터 언어", "바이트 코드 언어", "명령형 언어"], answer: "명령형 언어", explanation: "명령형 언어는 빌드 방식과는 관계가 없습니다." },
+            { question: "TCP/IP에서 응용계층의 프로토콜이 아닌 것은?", options: ["FTP", "ARP", "IMAP", "SMTP"], answer: "ARP", explanation: "ARP는 네트워크 계층에서 사용되는 프로토콜로, 응용 계층의 프로토콜은 아닙니다." },
+            { question: "유스케이스의 설명으로 옳지 않은 것은?", options: ["사용자 요구사항 기술", "외부 시스템과의 의사소통", "실제 수행 방법을 구현", "잘못된 설명"], answer: "잘못된 설명", explanation: "유스케이스는 시스템 요구사항을 기술하고 외부 시스템과의 의사소통을 다룹니다." },
+            { question: "HTML에서 콘텐츠 영역을 지정하는 태그는?", options: ["Header", "Section", "Article", "Aside"], answer: "Section", explanation: "Section 태그는 HTML에서 콘텐츠 영역을 구분하는 역할을 합니다." },
+            { question: "발견된 결함이 해결되고 결함이 아니라고 판명된 경우?", options: ["Assigned", "Clarified", "Closed", "Deferred"], answer: "Clarified", explanation: "Clarified는 결함이 아닌 것으로 판명된 경우 사용됩니다." },
+            { question: "테이블에서 모든 값이 다르게 적재되어야 하는 열 설정?", options: ["PRIMARY KEY", "FOREIGN KEY", "UNIQUE", "NOT NULL"], answer: "UNIQUE", explanation: "UNIQUE는 테이블에서 중복 값을 허용하지 않는 제약 조건입니다." },
+            { question: "데이터베이스의 모든 객체를 조회할 수 있는 사전 영역?", options: ["DBA_", "ALL_", "USER_", "잘못된 값"], answer: "DBA_", explanation: "DBA_는 데이터베이스 관리자가 모든 객체를 조회할 수 있는 영역입니다." },
+            { question: "추상화에서 연관된 속성을 하나의 집단으로 분류하는 것?", options: ["유형화", "집단화", "일반화", "조직화"], answer: "일반화", explanation: "일반화는 여러 객체의 공통된 속성을 묶어 하나의 집단으로 만드는 과정입니다." },
+            { question: "인터랙티브하게 사용할 수 있는 인터넷 기반 기술?", options: ["분산 시스템 SW", "IT 자원 관리", "서비스 플랫폼", "네트워크 보안"], answer: "서비스 플랫폼", explanation: "서비스 플랫폼은 사용자와의 상호작용을 위한 기술입니다." },
+            { question: "동시에 다수 트랜잭션이 처리될 때 서로의 연산에 개입하지 않는 특징?", options: ["원자성", "일관성", "고립성", "지속성"], answer: "고립성", explanation: "고립성은 여러 트랜잭션이 독립적으로 실행되어 서로 영향을 미치지 않는 특성입니다." },
+            { question: "반복적으로 최소 한 번 수행되는 문은?", options: ["while", "switch", "do-while", "for"], answer: "do-while", explanation: "do-while은 적어도 한 번은 실행되는 반복문입니다." },
+            { question: "결함 심각도 High가 아닌 경우는?", options: ["핵심 요구사항 미 구현", "시스템 다운", "장시간 시스템 응답 지연", "데이터베이스 에러"], answer: "장시간 시스템 응답 지연", explanation: "장시간 응답 지연은 High 심각도가 아닙니다." },
+            { question: "인스펙션과 워크스루의 설명 중 틀린 것은?", options: ["워크스루는 체크리스트 사용", "인스펙션은 빠르다", "잘못된 설명", "정답 아님"], answer: "인스펙션은 빠르다", explanation: "인스펙션은 보다 정밀하고 시간이 더 많이 소요됩니다." },
+            { question: "향후 기준이 되는 형상 항목의 집합체는?", options: ["기준선", "마이그레이션", "워크플로", "형상항목"], answer: "기준선", explanation: "기준선은 프로젝트의 중요한 지점을 나타내는 형상 항목입니다." },
+            { question: "운영체제란?", options: ["소프트웨어 관리", "하드웨어 관리", "자원 관리", "모두 해당"], answer: "모두 해당", explanation: "운영체제는 소프트웨어, 하드웨어 및 자원 관리 등을 담당합니다." },
+            { question: "Java 라이브러리를 포함하여 패키징하는 단위는?", options: ["jar", "war", "ear", "exe"], answer: "jar", explanation: "Java 라이브러리는 jar 파일 형식으로 패키징됩니다." },
+            { question: "몸짓, 말소리만으로 IT 기기를 사용하는 인터페이스는?", options: ["GUI", "CLI", "NUI", "TUI"], answer: "NUI", explanation: "NUI는 자연적 인터페이스로 몸짓이나 목소리를 통해 제어할 수 있는 기술입니다." },
+            { question: "사용자의 요구사항을 검증하는 테스트는?", options: ["단위 테스트", "통합 테스트", "인수 테스트", "시스템 테스트"], answer: "인수 테스트", explanation: "인수 테스트는 사용자의 요구사항을 기반으로 시스템이 제대로 동작하는지 확인하는 테스트입니다." },
+            { question: "프로그램과 분리된 공통 기능을 호출하여 사용하는 라이브러리는?", options: ["정적 라이브러리", "동적 라이브러리", "프레임워크", "SDK"], answer: "동적 라이브러리", explanation: "동적 라이브러리는 프로그램 실행 중에 호출되는 라이브러리입니다." }
         ];
 
         let currentQuestionIndex = 0;
+        let correctCount = 0;
 
         function loadQuestion() {
             const questionObj = questions[currentQuestionIndex];
@@ -67,9 +70,10 @@
             const questionObj = questions[currentQuestionIndex];
             const feedback = document.getElementById("feedback");
             if (selectedOption === questionObj.answer) {
-                feedback.innerText = "정답입니다!";
+                correctCount++;
+                feedback.innerText = `정답입니다! 이유: ${questionObj.explanation}`;
             } else {
-                feedback.innerText = "틀렸습니다. 정답은: " + questionObj.answer;
+                feedback.innerText = `틀렸습니다. 정답은: ${questionObj.answer}. 이유: ${questionObj.explanation}`;
             }
             document.getElementById("nextButton").disabled = false;
         }
@@ -79,7 +83,8 @@
             if (currentQuestionIndex < questions.length) {
                 loadQuestion();
             } else {
-                alert("모든 문제가 끝났습니다!");
+                document.getElementById("finalResult").innerText = `모든 문제를 풀었습니다! 정답 개수: ${correctCount}/${questions.length}`;
+                document.getElementById("nextButton").disabled = true;
             }
         }
 
